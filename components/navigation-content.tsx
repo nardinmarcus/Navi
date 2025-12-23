@@ -131,8 +131,9 @@ export function NavigationContent({ navigationData, siteData }: NavigationConten
       </div>
 
       <main className="flex-1">
-        <div className="sticky top-0 bg-background/90 backdrop-blur-sm z-30 px-3 sm:px-6 py-2">
-          <div className="flex items-center gap-3">
+        {/* 顶部导航栏 - 更现代化的设计 */}
+        <div className="sticky top-0 bg-background/95 backdrop-blur-md z-30 px-4 sm:px-6 py-3 border-b border-border/50 shadow-sm">
+          <div className="flex items-center gap-3 max-w-7xl mx-auto">
             <div className="flex-1">
               <SearchBar
                 navigationData={navigationData}
@@ -144,48 +145,6 @@ export function NavigationContent({ navigationData, siteData }: NavigationConten
             </div>
             <div className="flex items-center gap-1">
               <ModeToggle />
-              <Link
-                href="https://github.com/tianyaxiang/NavSphere"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="访问 GitHub 仓库"
-              >
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="hover:bg-accent hover:text-accent-foreground"
-                >
-                  <Github className="h-5 w-5" />
-                </Button>
-              </Link>
-              <Link
-                href="https://github.com/tianyaxiang/navsphere-extension"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="下载浏览器插件"
-              >
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="hover:bg-accent hover:text-accent-foreground"
-                >
-                  <Puzzle className="h-5 w-5" />
-                </Button>
-              </Link>
-              <Link
-                href="https://mp.weixin.qq.com/s/90LUmKilfLZfc5L63Ej3Sg"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="查看帮助文档"
-              >
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="hover:bg-accent hover:text-accent-foreground"
-                >
-                  <HelpCircle className="h-5 w-5" />
-                </Button>
-              </Link>
               <Button
                 variant="ghost"
                 size="icon"
@@ -198,22 +157,23 @@ export function NavigationContent({ navigationData, siteData }: NavigationConten
           </div>
         </div>
 
-        <div className="px-3 sm:px-6 py-3 sm:py-6">
-          <div className="space-y-6">
+        {/* 主内容区 - 增加间距和容器宽度 */}
+        <div className="px-4 sm:px-6 lg:px-8 py-6 sm:py-8 max-w-7xl mx-auto">
+          <div className="space-y-8">
             {navigationData.navigationItems.map((category) => (
-              <section key={category.id} id={category.id} className="scroll-m-16">
+              <section key={category.id} id={category.id} className="scroll-m-20">
                 <div className="space-y-4">
-                  <h2 className="text-base font-medium tracking-tight">
+                  <h2 className="text-lg sm:text-xl font-semibold tracking-tight text-foreground">
                     {category.title}
                   </h2>
 
                   {category.subCategories && category.subCategories.length > 0 ? (
                     category.subCategories.map((subCategory) => (
                       <div key={subCategory.id} id={subCategory.id} className="space-y-3">
-                        <h3 className="text-sm font-medium text-muted-foreground">
+                        <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
                           {subCategory.title}
                         </h3>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                           {(subCategory.items || []).map((item) => (
                             <NavigationCard key={item.id} item={item} siteConfig={siteData} />
                           ))}
@@ -221,7 +181,7 @@ export function NavigationContent({ navigationData, siteData }: NavigationConten
                       </div>
                     ))
                   ) : (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                       {(category.items || []).map((item) => (
                         <NavigationCard key={item.id} item={item} siteConfig={siteData} />
                       ))}

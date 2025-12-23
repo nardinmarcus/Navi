@@ -16,10 +16,10 @@ const inter = localFont({
 
 export const metadata: Metadata = {
   title: {
-    default: 'NavSphere',
-    template: '%s - NavSphere'
+    default: 'Navi - 我的导航',
+    template: '%s - Navi'
   },
-  description: 'A modern navigation platform',
+  description: '个人专属分类导航网站，快速访问常用网站',
   icons: {
     icon: '/favicon.ico'
   }
