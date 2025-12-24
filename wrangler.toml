@@ -8,6 +8,6 @@ GITHUB_CLIENT_ID = "Ov23liIklFIUwEipas5b"
 GITHUB_OWNER = "nardinmarcus"
 GITHUB_REPO = "navi"
 GITHUB_BRANCH = "main"
-NEXTAUTH_URL = "https://nav.newkit.site/api/auth"
-NEXT_PUBLIC_API_URL="https://nav.newkit.site"
+NEXTAUTH_URL = "https://navi.nardinmarcus.top/api/auth"
+NEXT_PUBLIC_API_URL="https://navi.nardinmarcus.top"
 
