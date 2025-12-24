@@ -21,7 +21,8 @@ export async function DELETE(
       return NextResponse.json({ error: 'Category ID is required' }, { status: 400 })
     }
 
-    const data = await getFileContent('navsphere/content/navigation.json') as NavigationData
+    // 传递 token 以支持私有仓库访问
+    const data = await getFileContent('navsphere/content/navigation.json', session.user.accessToken) as NavigationData
     
     const navigation = data.navigationItems.find(nav => nav.id === id)
     if (!navigation) {

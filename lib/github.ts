@@ -1,15 +1,56 @@
-import { auth } from '@/lib/auth'
 import { stringToBase64 } from '@/lib/buffer-utils'
 
-export async function getFileContent(path: string) {
+/**
+ * 公共数据获取函数 - 不需要用户认证
+ * 用于 GET 请求，在 Edge Runtime 中安全使用
+ */
+export async function getPublicFileContent(path: string) {
   const owner = process.env.GITHUB_OWNER!
   const repo = process.env.GITHUB_REPO!
   const branch = process.env.GITHUB_BRANCH || 'main'
 
   try {
-    const session = await auth()
-    const token = session?.user?.accessToken
+    const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${path}?ref=${branch}`
+    const response = await fetch(apiUrl, {
+      headers: {
+        Accept: 'application/vnd.github.v3.raw',
+        'User-Agent': 'NavSphere',
+      },
+    })
 
+    if (response.status === 404) {
+      console.log(`File not found: ${path}, returning default data`)
+      if (path.includes('navigation.json')) {
+        return { navigationItems: [] }
+      }
+      return {}
+    }
+
+    if (!response.ok) {
+      throw new Error(`GitHub API error: ${response.statusText}`)
+    }
+
+    const data = await response.json()
+    return data
+  } catch (error) {
+    console.error('Error fetching file:', error)
+    if (path.includes('navigation.json')) {
+      return { navigationItems: [] }
+    }
+    return {}
+  }
+}
+
+/**
+ * 需要认证的数据获取函数 - 用于需要写入权限的操作
+ * 动态导入 auth 以避免 Edge Runtime 问题
+ */
+export async function getFileContent(path: string, token?: string) {
+  const owner = process.env.GITHUB_OWNER!
+  const repo = process.env.GITHUB_REPO!
+  const branch = process.env.GITHUB_BRANCH || 'main'
+
+  try {
     const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${path}?ref=${branch}`
     const response = await fetch(apiUrl, {
       headers: {

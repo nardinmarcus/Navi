@@ -17,7 +17,8 @@ export async function PUT(
     }
 
     const updatedItem: NavigationItem = await request.json()
-    const data = await getFileContent('navsphere/content/navigation.json') as NavigationData
+    // 传递 token 以支持私有仓库访问
+    const data = await getFileContent('navsphere/content/navigation.json', session.user.accessToken) as NavigationData
     
     // 确保更新的导航项包含所有必需的字段
     const existingItem = data.navigationItems.find(item => item.id === id)

@@ -13,9 +13,9 @@ export async function POST(request: Request) {
     }
 
     const { sourceIndex, destinationIndex, itemId } = await request.json()
-    
-    // 获取当前导航数据
-    const data = await getFileContent('navsphere/content/navigation.json') as NavigationData
+
+    // 获取当前导航数据 - 传递 token 以支持私有仓库访问
+    const data = await getFileContent('navsphere/content/navigation.json', session.user.accessToken) as NavigationData
     
     // 确保导航项存在
     if (!data.navigationItems || !Array.isArray(data.navigationItems)) {

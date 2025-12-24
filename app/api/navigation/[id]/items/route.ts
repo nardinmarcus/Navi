@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
-import { commitFile, getFileContent } from '@/lib/github'
+import { commitFile, getPublicFileContent, getFileContent } from '@/lib/github'
 import type { NavigationData, NavigationItem, NavigationSubItem } from '@/types/navigation'
 
 export const runtime = 'edge'
@@ -11,9 +11,10 @@ export async function GET(
 ) {
   try {
     const { id } = await params
-    const data = await getFileContent('navsphere/content/navigation.json') as NavigationData
+    // 使用公共数据获取函数，不需要用户认证
+    const data = await getPublicFileContent('navsphere/content/navigation.json') as NavigationData
     const item = data.navigationItems.find(item => item.id === id)
-    
+
     if (!item) {
       return NextResponse.json({ error: 'Navigation not found' }, { status: 404 })
     }
@@ -36,8 +37,9 @@ export async function POST(
     }
 
     const newItem: NavigationSubItem = await request.json()
-    const data = await getFileContent('navsphere/content/navigation.json') as NavigationData
-    
+    // 传递 token 以支持私有仓库访问
+    const data = await getFileContent('navsphere/content/navigation.json', session.user.accessToken) as NavigationData
+
     const updatedItems = data.navigationItems.map(item => {
       if (item.id === id) {
         return {
@@ -73,8 +75,9 @@ export async function PUT(
     }
 
     const { index, item }: { index: number, item: NavigationSubItem } = await request.json()
-    const data = await getFileContent('navsphere/content/navigation.json') as NavigationData
-    
+    // 传递 token 以支持私有仓库访问
+    const data = await getFileContent('navsphere/content/navigation.json', session.user.accessToken) as NavigationData
+
     const navigation = data.navigationItems.find(nav => nav.id === id)
     if (!navigation) {
       return NextResponse.json({ error: 'Navigation not found' }, { status: 404 })
@@ -118,8 +121,9 @@ export async function DELETE(
     }
 
     const { index } = await request.json()
-    const data = await getFileContent('navsphere/content/navigation.json') as NavigationData
-    
+    // 传递 token 以支持私有仓库访问
+    const data = await getFileContent('navsphere/content/navigation.json', session.user.accessToken) as NavigationData
+
     const navigation = data.navigationItems.find(nav => nav.id === id)
     if (!navigation) {
       return NextResponse.json({ error: 'Navigation not found' }, { status: 404 })

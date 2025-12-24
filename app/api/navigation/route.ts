@@ -1,13 +1,14 @@
 import { NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
-import { commitFile, getFileContent } from '@/lib/github'
+import { commitFile, getPublicFileContent, getFileContent } from '@/lib/github'
 import type { NavigationData, NavigationItem } from '@/types/navigation'
 
 export const runtime = 'edge'
 
 export async function GET() {
   try {
-    const data = await getFileContent('navsphere/content/navigation.json')
+    // 使用公共数据获取函数，不需要用户认证
+    const data = await getPublicFileContent('navsphere/content/navigation.json')
     return NextResponse.json(data)
   } catch (error) {
     console.error('Failed to fetch navigation data:', error)

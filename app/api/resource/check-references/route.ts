@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { getFileContent } from '@/lib/github'
+import { getPublicFileContent } from '@/lib/github'
 import type { NavigationData } from '@/types/navigation'
 
 export const runtime = 'edge'
@@ -7,16 +7,16 @@ export const runtime = 'edge'
 export async function POST(request: Request) {
   try {
     const { resourcePaths } = await request.json()
-    
+
     if (!Array.isArray(resourcePaths)) {
       return NextResponse.json({ error: 'Invalid resource paths' }, { status: 400 })
     }
 
-    // 获取导航数据
-    const navigationData = await getFileContent('navsphere/content/navigation.json') as NavigationData
-    
-    // 获取站点配置数据
-    const siteData = await getFileContent('navsphere/content/site.json') as any
+    // 使用公共数据获取函数，不需要用户认证
+    const navigationData = await getPublicFileContent('navsphere/content/navigation.json') as NavigationData
+
+    // 使用公共数据获取函数，不需要用户认证
+    const siteData = await getPublicFileContent('navsphere/content/site.json') as any
     
     const references: Record<string, Array<{ type: string; location: string; title?: string }>> = {}
     

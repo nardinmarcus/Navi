@@ -1,12 +1,12 @@
 import { NextResponse } from 'next/server'
-import { getFileContent } from '@/lib/github'
+import { getPublicFileContent } from '@/lib/github'
 import { NavigationCategory } from '@/types/navigation'
 export const runtime = 'edge'
 
 export async function GET() {
   try {
-    // 动态读取最新的导航数据，而不是静态导入
-    const navigationData = await getFileContent('navsphere/content/navigation.json')
+    // 使用公共数据获取函数，不需要用户认证
+    const navigationData = await getPublicFileContent('navsphere/content/navigation.json')
     const navigationItems = navigationData.navigationItems || []
     
     // 计算一级分类数量

@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
-import { commitFile, getFileContent } from '@/lib/github'
+import { commitFile, getPublicFileContent, getFileContent } from '@/lib/github'
 import type { ResourceMetadata } from '@/types/resource-metadata'
 import { uint8ArrayToBase64 } from '@/lib/buffer-utils'
 
@@ -10,7 +10,8 @@ export const runtime = 'edge'
 
 export async function GET() {
     try {
-        const data = await getFileContent('navsphere/content/resource-metadata.json') as ResourceMetadata
+        // 使用公共数据获取函数，不需要用户认证
+        const data = await getPublicFileContent('navsphere/content/resource-metadata.json') as ResourceMetadata
         if (!data?.metadata || !Array.isArray(data.metadata)) {
             throw new Error('Invalid data structure');
         }
@@ -35,8 +36,8 @@ export async function POST(request: Request) {
         // 获取上传结果，包含路径和 commit hash
         const { path: imageUrl, commitHash } = await uploadImageToGitHub(binaryData, session.user.accessToken);
 
-        // Handle metadata
-        const metadata = await getFileContent('navsphere/content/resource-metadata.json') as ResourceMetadata;
+        // Handle metadata - POST 操作需要 token
+        const metadata = await getFileContent('navsphere/content/resource-metadata.json', session.user.accessToken) as ResourceMetadata;
         metadata.metadata.unshift({
             commit: commitHash,  // 使用实际的 commit hash
             hash: commitHash,    // 使用相同的 hash 作为资源标识
@@ -109,8 +110,8 @@ export async function DELETE(request: Request) {
             return NextResponse.json({ error: 'Invalid resource hashes' }, { status: 400 });
         }
 
-        // 获取当前的资源元数据
-        const metadata = await getFileContent('navsphere/content/resource-metadata.json') as ResourceMetadata;
+        // 获取当前的资源元数据 - DELETE 操作需要 token
+        const metadata = await getFileContent('navsphere/content/resource-metadata.json', session.user.accessToken) as ResourceMetadata;
 
         // 过滤掉要删除的资源
         const originalCount = metadata.metadata.length;
