@@ -5,9 +5,11 @@ pages_build_output_dir = ".vercel/output/static"
 
 [env.production.vars]
 GITHUB_CLIENT_ID = "Ov23liIklFIUwEipas5b"
+GITHUB_SECRET = "c83eea62b6f19a008874fe2034083f3715545d11"
 GITHUB_OWNER = "nardinmarcus"
 GITHUB_REPO = "navi"
 GITHUB_BRANCH = "main"
-NEXTAUTH_URL = "https://navi.nardinmarcus.top/api/auth"
-NEXT_PUBLIC_API_URL="https://navi.nardinmarcus.top"
+NEXTAUTH_URL = "https://nav.nardinmarcus.top/api/auth"
+NEXT_PUBLIC_API_URL="https://nav.nardinmarcus.top"
+NEXTAUTH_SECRET = "c83eea62b6f19a008874fe2034083f3715545d11"
 
