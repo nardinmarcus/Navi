@@ -156,6 +156,14 @@
           "href": "https://pagespeed.web.dev/",
           "description": "",
           "icon": "/assets/favicon_1765687105275.webp"
+        },
+        {
+          "id": "site_1766595795024_lpy99a531",
+          "title": "n8n.io - Workflow Automation",
+          "href": "https://nardinmarcus-n8n-free.hf.space/home/workflows",
+          "description": "",
+          "icon": "/assets/favicon_1766595775997.ico",
+          "enabled": true
         }
       ],
       "subCategories": [],
